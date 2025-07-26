@@ -72,7 +72,6 @@ export default function BloodPressureDisplay({
   isLoading = false,
   error = null,
 }: BloodPressureDisplayProps) {
-  const [isPressed, setIsPressed] = useState(false);
   const [pulseAnimation, setPulseAnimation] = useState(false);
 
   // Trigger pulse animation when reading changes
@@ -84,15 +83,7 @@ export default function BloodPressureDisplay({
     }
   }, [reading]);
 
-  const handleTouchStart = () => setIsPressed(true);
-  const handleTouchEnd = () => {
-    setIsPressed(false);
-    onTap();
-  };
-
-  const handleMouseDown = () => setIsPressed(true);
-  const handleMouseUp = () => {
-    setIsPressed(false);
+  const handleClick = () => {
     onTap();
   };
 
@@ -105,7 +96,7 @@ export default function BloodPressureDisplay({
           <h2 className="text-lg font-semibold text-gray-800 mb-2">Error</h2>
           <p className="text-sm text-red-600">{error}</p>
           <button
-            onClick={onTap}
+            onClick={handleClick}
             className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md text-sm font-medium hover:bg-red-600 transition-colors"
           >
             Try Again
@@ -132,18 +123,13 @@ export default function BloodPressureDisplay({
   if (!reading) {
     return (
       <div
-        className={`
+        className="
           w-full max-w-sm mx-auto p-6 bg-white rounded-lg shadow-lg border-2 border-dashed border-gray-300
           cursor-pointer select-none transition-all duration-150
           hover:border-blue-400 hover:shadow-xl
           active:scale-95 active:shadow-md
-          ${isPressed ? 'scale-95 shadow-md border-blue-500' : ''}
-        `}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={() => setIsPressed(false)}
+        "
+        onClick={handleClick}
       >
         <div className="text-center">
           <div className="text-gray-400 text-5xl mb-4">📊</div>
@@ -170,14 +156,9 @@ export default function BloodPressureDisplay({
         cursor-pointer select-none transition-all duration-150
         hover:shadow-xl hover:border-blue-300
         active:scale-95 active:shadow-md
-        ${isPressed ? 'scale-95 shadow-md border-blue-500' : ''}
         ${pulseAnimation ? 'animate-pulse' : ''}
       `}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={() => setIsPressed(false)}
+      onClick={handleClick}
     >
       {/* Header */}
       <div className="text-center mb-6">
@@ -221,7 +202,7 @@ export default function BloodPressureDisplay({
 
       {/* Action Prompt */}
       <div className="text-center">
-        <p className="text-xs text-gray-500 bg-blue-50 text-blue-700 p-2 rounded border border-blue-200">
+        <p className="text-xs bg-blue-50 text-blue-700 p-2 rounded border border-blue-200">
           Tap anywhere to take next reading
         </p>
       </div>
